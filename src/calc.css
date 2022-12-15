@@ -1,0 +1,41 @@
+/* Set the background color for the calculator */
+.calculator {
+  background-color: #333;
+}
+
+/* Style the screen of the calculator */
+.calculator-screen {
+  height: 150px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #222;
+  color: #fff;
+  text-align: right;
+  padding: 20px;
+  font-size: 20px;
+  font-family: sans-serif;
+}
+
+/* Style the calculator buttons */
+.calculator-button {
+  width: 25%;
+  height: 60px;
+  float: left;
+  padding: 20px;
+  background-color: #666;
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  font-family: sans-serif;
+  cursor: pointer;
+}
+
+/* Style the clear button */
+.clear {
+  background-color: #f44336;
+}
+
+/* Style the equal button */
+.equal {
+  background-color: #4caf50;
+}

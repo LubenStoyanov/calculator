@@ -1,3 +1,4 @@
+// Screen is still buggy after several calculations
 import { Center, Box, Grid, GridItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
@@ -58,9 +59,11 @@ function App() {
     } else if (value === "AC") {
       resetCalculator();
     } else {
+      if (value === "=" && !number) return;
       setShowResult((sr) => !sr);
       if (value === "=" && operation) {
         setResult(calculateResult(result, operation, number));
+        setShowResult(true);
         setNumber(null);
       }
       setIsSecondNumber(true);

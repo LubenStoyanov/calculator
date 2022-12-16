@@ -1,29 +1,8 @@
-// Screen is still buggy after several calculations
+import { calculateResult } from "./calculate";
+import buttons from "./buttons";
 import { Center, Box, Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
 import "./calc.css";
-
-const buttons = [
-  { value: "AC", label: "AC" },
-  { value: "+/-", label: "plusminus" },
-  { value: "%", label: "precentage" },
-  { value: "÷", label: "/" },
-  { value: "7", label: "7" },
-  { value: "8", label: "8" },
-  { value: "9", label: "9" },
-  { value: "x", label: "x" },
-  { value: "4", label: "4" },
-  { value: "5", label: "5" },
-  { value: "6", label: "6" },
-  { value: "-", label: "-" },
-  { value: "1", label: "1" },
-  { value: "2", label: "2" },
-  { value: "3", label: "3" },
-  { value: "+", label: "+" },
-  { value: "0", label: "0" },
-  { value: ".", label: "," },
-  { value: "=", label: "=" },
-];
 
 function App() {
   const [screenValue, setScreenValue] = useState<null | string>("0");
@@ -46,48 +25,25 @@ function App() {
     setShowDelete(false);
   };
 
-  const calculate = (
-    number1: number,
-    number2: number,
-    operater: string | null
-  ) => {
-    switch (operater) {
-      case "+":
-        return number1 + number2;
-      case "-":
-        return number1 - number2;
-      case "x":
-        return number1 * number2;
-      case "÷":
-        return number1 / number2;
-      default:
-        return 0;
-    }
-  };
-
-  const calculateResult = (
-    result: string | null,
-    operation: string | null,
-    number: string | null
-  ) => {
-    const num1 = Number(result);
-    const num2 = Number(number);
-
-    return calculate(num1, num2, operation).toString();
-  };
-
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const value = event.currentTarget.textContent;
     if (!value) return;
+    console.log(value);
 
     setLastUserInput(!isNaN(+value) ? "number" : "operation");
     setShowDelete(true);
 
-    if (value === "C") {
-      if (!isNaN(+value)) {
-      }
-    }
-    if (!isNaN(+value)) {
+    // if (value === "C") {
+    //   if (lastUserInput === "number" && !isSecondNumber) {
+    //     return setResult(null);
+    //   }
+    //   if (lastUserInput === "number" && isSecondNumber) {
+    //     return setNumber("0");
+    //   }
+    // }
+    if (value === "AC") {
+      resetCalculator();
+    } else if (!isNaN(+value)) {
       if (!isSecondNumber) {
         isFirstDigit ? setResult(value) : setResult((v) => (v += value));
         setIsFirstDigit(false);
@@ -95,12 +51,15 @@ function App() {
         isFirstDigit ? setNumber(value) : setNumber((v) => (v += value));
         setIsFirstDigit(false);
       }
-    } else if (value === "AC") {
-      resetCalculator();
     } else {
+      if (value === "+/-") {
+        if (!isSecondNumber)
+          return setResult(calculateResult(result, "x", "-1"));
+        return setNumber(calculateResult(number, "x", "-1"));
+      }
       if (value === "=" && !number) return;
 
-      setShowResult((sr) => !sr);
+      if (number) setShowResult((sr) => !sr);
 
       if (value === "=" && operation) {
         setResult(calculateResult(result, operation, number));
@@ -113,13 +72,12 @@ function App() {
       if (number) {
         setShowResult(true);
         setResult(calculateResult(result, operation, number));
+        setNumber(null);
       }
 
       setIsFirstDigit(true);
       setIsSecondNumber(true);
     }
-
-    setScreenValue(showResult ? result : number);
   };
 
   return (
@@ -138,8 +96,7 @@ function App() {
       >
         <GridItem area={"screen"}>
           <Box h="10" borderRadius="50" pr="1" border="1px" textAlign={"right"}>
-            {/* {showResult ? result : number} */}
-            {screenValue}
+            {showResult ? result : number}
           </Box>
         </GridItem>
         {buttons.map((button) => (
@@ -155,8 +112,8 @@ function App() {
               fontWeight="bold"
               cursor="pointer"
             >
-              {/* {showDelete && button.label === "AC" ? "C" : button.value} */}
-              {button.value}
+              {showDelete && button.label === "AC" ? "C" : button.value}
+              {/* {button.value} */}
             </Center>
           </GridItem>
         ))}
